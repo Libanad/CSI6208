@@ -1,5 +1,6 @@
 # Liban Adhikari
 # 10714736
+# I have pushed this code in github as well GITHUB LINK: https://github.com/Libanad/CSI6208.git
 # Guess Game Assignment
 
 import random

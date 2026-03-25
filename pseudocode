@@ -1,7 +1,5 @@
-START
-
-IMPORT random module
-
+START PROGRAM
+IMPORT random
 FUNCTION compareWords(word1, word2)
     SET count = 0
     FOR each letter position in word1
@@ -15,52 +13,79 @@ END FUNCTION
 
 FUNCTION main
 
-    CREATE list candidateWords with 6-letter words
+    CREATE list candidateWords with 100 words
 
-    PRINT "Welcome to the Guess Game!"
+    PRINT "Welcome to Guess Game"
 
-    REPEAT forever
+    WHILE user wants to play
 
-        SELECT random word from candidateWords
-        STORE as secretWord
+        SELECT 8 random words from candidateWords → wordList
+        SELECT random word from wordList → password
 
-        PRINT "Guess the 6-letter word"
+        SET guessesRemaining = 4
+        SET won = False
 
-        REPEAT forever
+        CREATE empty dictionary guessedWords
 
-            ASK user to enter guess
-            CONVERT guess to uppercase
+        WHILE guessesRemaining > 0 AND won = False
 
-            IF guess length is not 6
-                PRINT "Please enter a 6-letter word"
-                CONTINUE to next iteration
+            DISPLAY wordList
+
+            FOR each word in wordList
+                IF word already guessed
+                    SHOW word with matching letters
+                ELSE
+                    SHOW word normally
+                ENDIF
+            ENDFOR
+
+            PRINT guesses remaining
+
+            TRY
+                GET user input (1-8)
+                CONVERT input to number
+            CATCH error
+                PRINT "Invalid input"
+                CONTINUE
+            END TRY
+
+            GET guessed word
+
+            IF word already guessed
+                PRINT "Already guessed"
+                CONTINUE
             ENDIF
 
-            CALL compareWords(secretWord, guess)
-            STORE result in match
+            guessesRemaining = guessesRemaining − 1
 
-            IF guess equals secretWord
-                PRINT "Correct! You guessed the word"
-                PRINT "Starting new game..."
-                BREAK inner loop
+            IF guessed word = password
+                PRINT "Password Correct"
+                SET won = True
             ELSE
-                PRINT "Matching letters in correct position:", match
+                CALL compareWords
+                STORE matching letters
+                PRINT matching result
             ENDIF
 
-        END REPEAT
+        ENDWHILE
 
-        ASK user "Do you want to play again? (yes/no)"
-        STORE answer in playAgain
-
-        IF playAgain is not "yes"
-            PRINT "Thanks for playing!"
-            BREAK outer loop
+        IF won = True
+            PRINT "You Win"
+        ELSE
+            PRINT "You Lose"
+            PRINT password
         ENDIF
 
-    END REPEAT
+        ASK "Play Again?"
+
+        IF answer not yes
+            EXIT program
+        ENDIF
+
+    ENDWHILE
 
 END FUNCTION
 
 CALL main
 
-END
+END PROGRAM
