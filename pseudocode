@@ -1,0 +1,66 @@
+START
+
+IMPORT random module
+
+FUNCTION compareWords(word1, word2)
+    SET count = 0
+    FOR each letter position in word1
+        IF letter in word1 equals letter in word2
+            count = count + 1
+        ENDIF
+    ENDFOR
+    RETURN count
+END FUNCTION
+
+
+FUNCTION main
+
+    CREATE list candidateWords with 6-letter words
+
+    PRINT "Welcome to the Guess Game!"
+
+    REPEAT forever
+
+        SELECT random word from candidateWords
+        STORE as secretWord
+
+        PRINT "Guess the 6-letter word"
+
+        REPEAT forever
+
+            ASK user to enter guess
+            CONVERT guess to uppercase
+
+            IF guess length is not 6
+                PRINT "Please enter a 6-letter word"
+                CONTINUE to next iteration
+            ENDIF
+
+            CALL compareWords(secretWord, guess)
+            STORE result in match
+
+            IF guess equals secretWord
+                PRINT "Correct! You guessed the word"
+                PRINT "Starting new game..."
+                BREAK inner loop
+            ELSE
+                PRINT "Matching letters in correct position:", match
+            ENDIF
+
+        END REPEAT
+
+        ASK user "Do you want to play again? (yes/no)"
+        STORE answer in playAgain
+
+        IF playAgain is not "yes"
+            PRINT "Thanks for playing!"
+            BREAK outer loop
+        ENDIF
+
+    END REPEAT
+
+END FUNCTION
+
+CALL main
+
+END

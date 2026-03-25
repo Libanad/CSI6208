@@ -1,11 +1,10 @@
 # Liban Adhikari
 # 10714736
-# Come on Let's Play a guessing game with me
+# Guess Game Assignment
 
 import random
 
 
-# Function to compare two words
 def compareWords(word1, word2):
     count = 0
     for i in range(len(word1)):
@@ -31,34 +30,71 @@ def main():
     'TERMER', 'VENDER', 'WEDDED', 'WEEDED', 'WELDED', 'YONDER']
 
 
-    print("Welcome to the Guess Game!")
+    print("Welcome to Guess Game!")
 
-   
     while True:
 
-        secretWord = random.choice(candidateWords)
+        wordList = random.sample(candidateWords, 8)
+        password = random.choice(wordList)
 
-        print("\nGuess the 6-letter word")
+        guessesRemaining = 4
+        won = False
+        guessedWords = {}
 
-        while True:
-            guess = input("Enter your guess: ").upper()
+        while guessesRemaining > 0 and not won:
 
-           
-            if len(guess) != 6:
-                print("Please enter a 6-letter word.")
+            print("\nWord List:")
+
+            for i in range(len(wordList)):
+                word = wordList[i]
+                if word in guessedWords:
+                    print(i + 1, ".", word, "-", guessedWords[word], "/6")
+                else:
+                    print(i + 1, ".", word)
+
+            print("Guesses Remaining:", guessesRemaining)
+
+            try:
+                choice = int(input("Enter word number (1-8): ")) - 1
+
+                if choice < 0 or choice >= 8:
+                    print("Invalid input")
+                    continue
+
+            except:
+                print("Invalid input")
                 continue
 
-            match = compareWords(secretWord, guess)
+            guess = wordList[choice]
 
-            if guess == secretWord:
-                print("Correct! You guessed the word:", secretWord)
-                print("Starting new game...")
-                break
+            if guess in guessedWords:
+                print("You already guessed this word")
+                continue
+
+            guessesRemaining -= 1
+
+            if guess == password:
+                print("Password Correct!")
+                won = True
             else:
-                print("Matching letters in correct position:", match)
+                match = compareWords(password, guess)
+                guessedWords[guess] = match
+                print("Password Incorrect")
+                print(match, "/6 letters correct")
 
-        playAgain = input("Do you want to play again? (yes/no): ").lower()
+
+        if won:
+            print("You Win!")
+        else:
+            print("You Lose!")
+            print("Password was:", password)
+
+
+        playAgain = input("Play again? (yes/no): ").lower()
+
         if playAgain != "yes":
             print("Thanks for playing!")
             break
+
+
 main()
