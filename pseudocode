@@ -1,91 +1,176 @@
 START PROGRAM
+
 IMPORT random
-FUNCTION compareWords(word1, word2)
-    SET count = 0
-    FOR each letter position in word1
-        IF letter in word1 equals letter in word2
-            count = count + 1
+
+DISPLAY "Welcome to Guess Game"
+
+REPEAT
+
+    candidateWords ← ['AETHER', 'BADGED', 'BALDER', ... , 'YONDER']
+
+    wordList ← randomly select 8 words from candidateWords
+
+    password ← randomly select 1 word from wordList
+
+    guessesRemaining ← 4
+
+    won ← False
+
+    guessedWords ← empty dictionary
+
+
+    WHILE guessesRemaining > 0 AND won = False
+
+        CALL displayWordList(wordList, guessedWords)
+
+        DISPLAY "Guesses Remaining:", guessesRemaining
+
+        CALL validateInput() → choice
+
+        IF choice = NULL
+            CONTINUE
         ENDIF
-    ENDFOR
-    RETURN count
-END FUNCTION
 
+        guess ← wordList[choice]
 
-FUNCTION main
+        IF guess exists in guessedWords
+            DISPLAY "You already guessed this word"
+            CONTINUE
+        ENDIF
 
-    CREATE list candidateWords with 100 words
+        guessesRemaining ← guessesRemaining − 1
 
-    PRINT "Welcome to Guess Game"
+        IF guess = password
 
-    WHILE user wants to play
+            DISPLAY "The Password Is Correct!"
 
-        SELECT 8 random words from candidateWords → wordList
-        SELECT random word from wordList → password
+            won ← True
 
-        SET guessesRemaining = 4
-        SET won = False
-
-        CREATE empty dictionary guessedWords
-
-        WHILE guessesRemaining > 0 AND won = False
-
-            DISPLAY wordList
-
-            FOR each word in wordList
-                IF word already guessed
-                    SHOW word with matching letters
-                ELSE
-                    SHOW word normally
-                ENDIF
-            ENDFOR
-
-            PRINT guesses remaining
-
-            TRY
-                GET user input (1-8)
-                CONVERT input to number
-            CATCH error
-                PRINT "Invalid input"
-                CONTINUE
-            END TRY
-
-            GET guessed word
-
-            IF word already guessed
-                PRINT "Already guessed"
-                CONTINUE
-            ENDIF
-
-            guessesRemaining = guessesRemaining − 1
-
-            IF guessed word = password
-                PRINT "Password Correct"
-                SET won = True
-            ELSE
-                CALL compareWords
-                STORE matching letters
-                PRINT matching result
-            ENDIF
-
-        ENDWHILE
-
-        IF won = True
-            PRINT "You Win"
         ELSE
-            PRINT "You Lose"
-            PRINT password
-        ENDIF
 
-        ASK "Play Again?"
+            CALL compareWords(password, guess) → match
 
-        IF answer not yes
-            EXIT program
+            guessedWords[guess] ← match
+
+            DISPLAY "The Password is Incorrect"
+
+            DISPLAY match "/6 letters correct"
+
         ENDIF
 
     ENDWHILE
 
-END FUNCTION
 
-CALL main
+    IF won = True
+
+        DISPLAY "Congratulationnnnn You Win!"
+
+    ELSE
+
+        DISPLAY "Sorry You Lose!"
+
+        DISPLAY "Password was:", password
+
+    ENDIF
+
+
+    CALL playAgain() → play
+
+UNTIL play = False
+
+
+DISPLAY "Thanks for playing!"
 
 END PROGRAM
+
+
+
+FUNCTION compareWords(word1, word2)
+
+    count ← 0
+
+    FOR i ← 0 to length(word1) − 1
+
+        IF word1[i] = word2[i]
+
+            count ← count + 1
+
+        ENDIF
+
+    ENDFOR
+
+RETURN count
+
+END FUNCTION
+
+
+
+FUNCTION displayWordList(wordList, guessedWords)
+
+    DISPLAY "Word List"
+
+    FOR i ← 0 to length(wordList) − 1
+
+        word ← wordList[i]
+
+        IF word exists in guessedWords
+
+            DISPLAY i + 1 , word , guessedWords[word] , "/6"
+
+        ELSE
+
+            DISPLAY i + 1 , word
+
+        ENDIF
+
+    ENDFOR
+
+END FUNCTION
+
+
+
+FUNCTION validateInput()
+
+    TRY
+
+        INPUT choice
+
+        choice ← choice − 1
+
+        IF choice < 0 OR choice > 7
+
+            DISPLAY "The number must be between 1 and 8. Invalid input"
+
+            RETURN NULL
+
+        ENDIF
+
+        RETURN choice
+
+    CATCH error
+
+        DISPLAY "Invalid input"
+
+        RETURN NULL
+
+END FUNCTION
+
+
+
+FUNCTION playAgain()
+
+    INPUT "Do You want to play again? (yes/no): " → answer
+
+    CONVERT answer to lowercase
+
+    IF answer = "yes"
+
+        RETURN True
+
+    ELSE
+
+        RETURN False
+
+    ENDIF
+
+END FUNCTION

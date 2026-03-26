@@ -1,17 +1,9 @@
 # Liban Adhikari
 # 10714736
-# I have pushed this code in github as well GITHUB LINK: https://github.com/Libanad/CSI6208.git
 # Guess Game Assignment
 
 import random
-
-
-def compareWords(word1, word2):
-    count = 0
-    for i in range(len(word1)):
-        if word1[i] == word2[i]:
-            count += 1
-    return count
+from guess_utils import compareWords, displayWordList, validateInput, playAgain
 
 
 def main():
@@ -44,26 +36,13 @@ def main():
 
         while guessesRemaining > 0 and not won:
 
-            print("\nWord List:")
-
-            for i in range(len(wordList)):
-                word = wordList[i]
-                if word in guessedWords:
-                    print(i + 1, ".", word, "-", guessedWords[word], "/6")
-                else:
-                    print(i + 1, ".", word)
+            displayWordList(wordList, guessedWords)
 
             print("Guesses Remaining:", guessesRemaining)
 
-            try:
-                choice = int(input("Enter word number (1-8): ")) - 1
+            choice = validateInput()
 
-                if choice < 0 or choice >= 8:
-                    print("Invalid input")
-                    continue
-
-            except:
-                print("Invalid input")
+            if choice is None:
                 continue
 
             guess = wordList[choice]
@@ -75,25 +54,21 @@ def main():
             guessesRemaining -= 1
 
             if guess == password:
-                print("Password Correct!")
+                print("The Password Is Correct!")
                 won = True
             else:
                 match = compareWords(password, guess)
                 guessedWords[guess] = match
-                print("Password Incorrect")
+                print("The Password is Incorrect")
                 print(match, "/6 letters correct")
 
-
         if won:
-            print("You Win!")
+            print("Congratulationnnnn You Win!")
         else:
-            print("You Lose!")
+            print("Sorry You Lose!")
             print("Password was:", password)
 
-
-        playAgain = input("Play again? (yes/no): ").lower()
-
-        if playAgain != "yes":
+        if not playAgain():
             print("Thanks for playing!")
             break
 
