@@ -1,3 +1,8 @@
+# Liban Adhikari
+# 10714736
+#I HAVE UPLOADED THE CODE ON GITHUB checkit out https://github.com/Libanad/CSI6208.git
+# Guess Game Assignment
+#Come let's play the game together
 def compareWords(word1, word2):
     count = 0
     for i in range(len(word1)):

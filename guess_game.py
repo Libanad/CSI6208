@@ -1,9 +1,12 @@
 # Liban Adhikari
 # 10714736
+#I HAVE UPLOADED THE CODE ON GITHUB checkit out https://github.com/Libanad/CSI6208.git
 # Guess Game Assignment
+#Come let's play the game together
 
 import random
-from guess_utils import compareWords, displayWordList, validateInput, playAgain
+
+from guess_utils import compareWords, displayWordList, playAgain, validateInput
 
 
 def main():
